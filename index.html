@@ -85,9 +85,7 @@
       transition: transform 0.05s;
     }
     .wall-target:active { transform: scale(0.95); }
-    .hit-animation {
-      animation: shake 0.1s infinite alternate;
-    }
+    .hit-animation { animation: shake 0.1s infinite alternate; }
     @keyframes shake {
       0% { transform: translate(2px, 1px) rotate(0deg); }
       100% { transform: translate(-1px, -2px) rotate(1deg); }
@@ -112,7 +110,6 @@
       border-radius: 4px;
       background-size: cover;
       background-position: center;
-      position: relative;
     }
     .stickman {
       width: 20px;
@@ -127,9 +124,7 @@
       content: ''; position: absolute; top: 12px; left: 11px;
       width: 2px; height: 15px; background: #fff;
     }
-    .stick-limb {
-      position: absolute; background: #fff;
-    }
+    .stick-limb { position: absolute; background: #fff; }
     .char-name-tag {
       font-size: 10px;
       background: rgba(0,0,0,0.7);
@@ -145,11 +140,7 @@
       overflow: hidden;
       margin-top: 10px;
     }
-    .hp-bar {
-      width: 100%;
-      height: 15px;
-      background-color: #e74c3c;
-    }
+    .hp-bar { width: 100%; height: 15px; background-color: #e74c3c; }
     .shop-section { margin-top: 25px; }
     .shop-grid {
       display: grid;
@@ -167,9 +158,12 @@
     }
     .shop-item.owned { border-color: #27ae60; background: #2d4a36; }
     .shop-preview {
-      width: 50px; height: 50px; background-size: cover; background-position: center;
-      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+      width: 50px; height: 50px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
       background-color: #222;
+      overflow: hidden;
+      flex-shrink: 0;
     }
     .shop-info { flex: 1; display: flex; flex-direction: column; }
     .shop-info .name { font-weight: bold; font-size: 16px; color: #fff; }
@@ -195,13 +189,13 @@
   <div class="header">
     <h2>🧱 포세이큰 벽 부수기 클리커</h2>
     <div>
-      <button class="btn-action" onclick="saveGame()">💾 진행 저장</button>
-      <button class="btn-action" onclick="loadGame()" style="background:#6c5ce7;">🔄 불러오기</button>
+      <button class="btn-action" id="btnSave">💾 진행 저장</button>
+      <button class="btn-action" id="btnLoad" style="background:#6c5ce7;">🔄 불러오기</button>
     </div>
   </div>
 
   <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-    <div class="money-display">💰 <span id="moneyTxt">50</span> 원</div>
+    <div class="money-display">💰 <span id="moneyTxt">500</span> 원</div>
     <div style="font-size:16px; color:#aaa;">총 자동 공격력: <span id="dpsTxt">0</span>/초</div>
   </div>
 
@@ -209,7 +203,7 @@
     <div class="summon-zone" id="summonZone"></div>
     <div class="wall-zone">
       <div id="wallStageTxt" style="font-size:12px; color:#aaa; margin-bottom:5px;">1단계 벽</div>
-      <div id="wallObj" class="wall-target" onclick="clickWall()">🧱<br>WALL</div>
+      <div id="wallObj" class="wall-target">🧱<br>WALL</div>
       <div style="font-size:11px; margin-top:5px;"><span id="hpTxt">1000</span></div>
       <div class="hp-bar-container">
         <div id="hpBar" class="hp-bar"></div>
@@ -235,16 +229,16 @@
   };
 
   const characterData = [
-    { id: "coolkid", name: "쿨키드", cost: 2500, dmg: 50, isStick: true },
-    { id: "slasher", name: "슬레셔", cost: 7500, dmg: 100, isStick: true },
-    { id: "jondo", name: "존도", cost: 15000, dmg: 500, img: "https://images.rbxcdn.com/9da76ab2e20b60459695669f69747209.png" },
-    { id: "1x1x1", name: "1x1x1", cost: 75000, dmg: 2000, img: "https://tr.rbxcdn.com/ec67b2d2a450a86f9ee5b1cb3c2957b7/420/420/Avatar/Png" },
-    { id: "nolly", name: "놀리", cost: 150000, dmg: 7500, isStick: true },
-    { id: "guest666", name: "게스트666", cost: 500000, dmg: 30000, img: "https://tr.rbxcdn.com/13ccf30e611847e06a3e14300bb5b1f0/420/420/Avatar/Png" },
-    { id: "zenindo", name: "젠인도", cost: 1500000, dmg: 100000, img: "https://tr.rbxcdn.com/1df473215904d9a560f8fdfad5c86df2/420/420/Avatar/Png" },
-    { id: "cola", name: "콜라", cost: 19999999, dmg: 150000, img: "https://tr.rbxcdn.com/6bd484b90cb490891d575c80f4cf2dc2/420/420/Avatar/Png" },
-    { id: "jungwoo", name: "정우", cost: 75000000, dmg: 2500000, img: "https://lh3.googleusercontent.com/d/1AhS138BLz4VGLOJBbtkT3nhquvunZ99O" },
-    { id: "dnthfToa", name: "우솔쌤", cost: 250000000, dmg: 1200000, img: "https://raw.githubusercontent.com/jeon4830112000-dev/wallgame/main/%EA%B9%80%EC%9A%B0%EC%86%94.jpg" }
+    { id: "coolkid",  name: "쿨키드",   cost: 2500,      dmg: 50,      isStick: true },
+    { id: "slasher",  name: "슬레셔",   cost: 7500,      dmg: 100,     isStick: true },
+    { id: "jondo",    name: "존도",     cost: 15000,     dmg: 500,     img: "https://images.rbxcdn.com/9da76ab2e20b60459695669f69747209.png" },
+    { id: "1x1x1",   name: "1x1x1",   cost: 75000,     dmg: 2000,    img: "https://tr.rbxcdn.com/ec67b2d2a450a86f9ee5b1cb3c2957b7/420/420/Avatar/Png" },
+    { id: "nolly",   name: "놀리",     cost: 150000,    dmg: 7500,    isStick: true },
+    { id: "guest666", name: "게스트666", cost: 500000,    dmg: 30000,   img: "https://tr.rbxcdn.com/13ccf30e611847e06a3e14300bb5b1f0/420/420/Avatar/Png" },
+    { id: "zenindo",  name: "젠인도",   cost: 1500000,   dmg: 100000,  img: "https://tr.rbxcdn.com/1df473215904d9a560f8fdfad5c86df2/420/420/Avatar/Png" },
+    { id: "cola",     name: "콜라",     cost: 19999999,  dmg: 150000,  img: "https://tr.rbxcdn.com/6bd484b90cb490891d575c80f4cf2dc2/420/420/Avatar/Png" },
+    { id: "jungwoo",  name: "정우",     cost: 75000000,  dmg: 2500000, img: "https://lh3.googleusercontent.com/d/1AhS138BLz4VGLOJBbtkT3nhquvunZ99O" },
+    { id: "dnthfToa", name: "우솔쌤",   cost: 250000000, dmg: 1200000, img: "https://raw.githubusercontent.com/jeon4830112000-dev/wallgame/main/%EA%B9%80%EC%9A%B0%EC%86%94.jpg" }
   ];
 
   function getDps() {
@@ -287,73 +281,85 @@
     if (gameState.money >= cost && !gameState.ownedCharacters.includes(id)) {
       gameState.money -= cost;
       gameState.ownedCharacters.push(id);
-      showStatus(`⚔️ 새로운 대원이 전장에 합류했습니다!`);
+      showStatus("⚔️ 새로운 대원이 전장에 합류했습니다!");
       updateUi();
     }
   }
 
   function updateUi() {
     document.getElementById('moneyTxt').innerText = Math.floor(gameState.money).toLocaleString();
-    document.getElementById('hpTxt').innerText = `${Math.floor(gameState.wallHp).toLocaleString()} / ${gameState.wallMaxHp.toLocaleString()}`;
+    document.getElementById('hpTxt').innerText =
+      Math.floor(gameState.wallHp).toLocaleString() + " / " + gameState.wallMaxHp.toLocaleString();
     document.getElementById('dpsTxt').innerText = getDps().toLocaleString();
-
-    let stage = gameState.wallLevel || 1;
-    document.getElementById('wallStageTxt').innerText = `🔥 현재 벽: ${stage} 단계`;
+    document.getElementById('wallStageTxt').innerText = "🔥 현재 벽: " + (gameState.wallLevel || 1) + " 단계";
 
     let hpPercent = (gameState.wallHp / gameState.wallMaxHp) * 100;
     document.getElementById('hpBar').style.width = hpPercent + "%";
 
+    // 소환존
     const summonZone = document.getElementById('summonZone');
     summonZone.innerHTML = "";
-
-    gameState.ownedCharacters.forEach(id => {
-      const char = characterData.find(c => c.id === id);
+    gameState.ownedCharacters.forEach(function(id) {
+      const char = characterData.find(function(c) { return c.id === id; });
       if (!char) return;
       const charDiv = document.createElement('div');
       charDiv.className = "summoned-char";
       if (char.isStick) {
-        charDiv.innerHTML = `
-          <div class="stickman">
-            <div class="stick-limb" style="width:10px; height:2px; top:15px; left:2px; transform:rotate(-15deg);"></div>
-            <div class="stick-limb" style="width:10px; height:2px; top:15px; left:12px; transform:rotate(15deg);"></div>
-            <div class="stick-limb" style="width:2px; height:12px; top:25px; left:8px; transform:rotate(20deg);"></div>
-            <div class="stick-limb" style="width:2px; height:12px; top:25px; left:14px; transform:rotate(-20deg);"></div>
-          </div>
-          <div class="char-name-tag">${char.name}</div>
-        `;
+        charDiv.innerHTML =
+          '<div class="stickman">' +
+            '<div class="stick-limb" style="width:10px;height:2px;top:15px;left:2px;transform:rotate(-15deg);"></div>' +
+            '<div class="stick-limb" style="width:10px;height:2px;top:15px;left:12px;transform:rotate(15deg);"></div>' +
+            '<div class="stick-limb" style="width:2px;height:12px;top:25px;left:8px;transform:rotate(20deg);"></div>' +
+            '<div class="stick-limb" style="width:2px;height:12px;top:25px;left:14px;transform:rotate(-20deg);"></div>' +
+          '</div>' +
+          '<div class="char-name-tag">' + char.name + '</div>';
       } else {
-        charDiv.innerHTML = `
-          <div class="char-sprite" style="background-image: url('${char.img}');"></div>
-          <div class="char-name-tag" style="color:#f1c40f;">${char.name}</div>
-        `;
+        charDiv.innerHTML =
+          '<div class="char-sprite" style="background-image:url(\'' + char.img + '\');"></div>' +
+          '<div class="char-name-tag" style="color:#f1c40f;">' + char.name + '</div>';
       }
       summonZone.appendChild(charDiv);
     });
 
+    // 상점
     const shopGrid = document.getElementById('shopGrid');
     shopGrid.innerHTML = "";
-    characterData.forEach(char => {
+    characterData.forEach(function(char) {
       const isOwned = gameState.ownedCharacters.includes(char.id);
       const canBuy = gameState.money >= char.cost;
+
       const itemDiv = document.createElement('div');
-      itemDiv.className = `shop-item ${isOwned ? 'owned' : ''}`;
-      let previewHtml = "";
+      itemDiv.className = "shop-item" + (isOwned ? " owned" : "");
+
+      const preview = document.createElement('div');
+      preview.className = "shop-preview";
       if (char.isStick) {
-        previewHtml = `<div class="stickman" style="transform:scale(0.8); margin-top:5px;"></div>`;
+        preview.innerHTML = '<div class="stickman" style="transform:scale(0.8);margin-top:5px;"></div>';
       } else {
-        previewHtml = `<div style="width:100%; height:100%; background-image:url('${char.img}'); background-size:cover; background-position:center; border-radius:4px;"></div>`;
+        preview.style.backgroundImage = "url('" + char.img + "')";
+        preview.style.backgroundSize = "cover";
+        preview.style.backgroundPosition = "center";
       }
-      itemDiv.innerHTML = `
-        <div class="shop-preview">${previewHtml}</div>
-        <div class="shop-info">
-          <span class="name">${char.name}</span>
-          <span class="details">⚔️ 공격력: +${char.dmg.toLocaleString()}/초</span>
-          <span class="price">💰 ${char.cost.toLocaleString()} 원</span>
-        </div>
-        <button ${isOwned || !canBuy ? 'disabled' : ''} onclick="buyCharacter('${char.id}', ${char.cost})">
-          ${isOwned ? '🚀 소환됨' : '소환'}
-        </button>
-      `;
+
+      const info = document.createElement('div');
+      info.className = "shop-info";
+      info.innerHTML =
+        '<span class="name">' + char.name + '</span>' +
+        '<span class="details">⚔️ 공격력: +' + char.dmg.toLocaleString() + '/초</span>' +
+        '<span class="price">💰 ' + char.cost.toLocaleString() + ' 원</span>';
+
+      const btn = document.createElement('button');
+      btn.textContent = isOwned ? '🚀 소환됨' : '소환';
+      btn.disabled = isOwned || !canBuy;
+      if (!isOwned && canBuy) {
+        btn.addEventListener('click', (function(cid, ccost) {
+          return function() { buyCharacter(cid, ccost); };
+        })(char.id, char.cost));
+      }
+
+      itemDiv.appendChild(preview);
+      itemDiv.appendChild(info);
+      itemDiv.appendChild(btn);
       shopGrid.appendChild(itemDiv);
     });
   }
@@ -361,76 +367,53 @@
   function showStatus(msg) {
     const statusDiv = document.getElementById('statusMsg');
     statusDiv.innerText = msg;
-    setTimeout(() => { if(statusDiv.innerText === msg) statusDiv.innerText = ""; }, 3000);
+    setTimeout(function() {
+      if (statusDiv.innerText === msg) statusDiv.innerText = "";
+    }, 3000);
   }
 
   function saveGame() {
-    showStatus("진행 상태 저장 중...");
-    if (typeof google !== 'undefined' && google.script && google.script.run) {
-      google.script.run
-        .withSuccessHandler(function(res) { showStatus(res); })
-        .saveGameData(gameState.money, gameState.wallHp, gameState.wallMaxHp, gameState.ownedCharacters);
-    } else {
-      localStorage.setItem('forsaken_wall_save', JSON.stringify(gameState));
-      showStatus("💾 브라우저 로컬 저장소에 세이브가 정상 저장되었습니다!");
-    }
+    localStorage.setItem('forsaken_wall_save', JSON.stringify(gameState));
+    showStatus("💾 저장 완료!");
   }
 
   function loadGame() {
-    showStatus("진행 데이터를 불러오는 중...");
-    if (typeof google !== 'undefined' && google.script && google.script.run) {
-      google.script.run
-        .withSuccessHandler(function(data) {
-          if (data) {
-            gameState.money = Number(data.money) || 50;
-            gameState.wallHp = Number(data.wallHp) || 1000;
-            gameState.wallMaxHp = Number(data.wallMaxHp) || 1000;
-            gameState.wallLevel = Number(data.wallLevel) || 1;
-            gameState.ownedCharacters = data.ownedCharacters || [];
-            updateUi();
-            showStatus("데이터 로드 완료!");
-          } else {
-            loadLocalGame();
-          }
-        })
-        .loadGameData();
-    } else {
-      loadLocalGame();
-    }
-  }
-
-  function loadLocalGame() {
     const localData = localStorage.getItem('forsaken_wall_save');
     if (localData) {
       try {
         const parsed = JSON.parse(localData);
-        gameState.money = parsed.money || 50;
+        gameState.money = parsed.money || 500;
         gameState.wallHp = parsed.wallHp || 1000;
         gameState.wallMaxHp = parsed.wallMaxHp || 1000;
         gameState.wallLevel = parsed.wallLevel || 1;
         gameState.ownedCharacters = parsed.ownedCharacters || [];
         updateUi();
-        showStatus("🔄 이전 데이터를 성공적으로 불러왔습니다.");
-      } catch (e) {
-        showStatus("새로운 전장 기록을 생성합니다.");
+        showStatus("🔄 불러오기 완료!");
+      } catch(e) {
+        showStatus("새로운 게임을 시작합니다.");
       }
     } else {
-      showStatus("새로운 전장 기록을 생성합니다.");
+      showStatus("새로운 게임을 시작합니다.");
     }
   }
 
-  setInterval(() => {
+  // 이벤트 리스너 방식으로 변경 (CSP 우회)
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('wallObj').addEventListener('click', clickWall);
+    document.getElementById('btnSave').addEventListener('click', saveGame);
+    document.getElementById('btnLoad').addEventListener('click', loadGame);
+    updateUi();
+    loadGame();
+  });
+
+  // 자동 공격 타이머
+  setInterval(function() {
     let dps = getDps();
     if (dps > 0) {
       triggerHitVisual();
       damageWall(dps);
     }
   }, 1000);
-
-  window.onload = function() {
-    updateUi();
-    loadGame();
-  };
 </script>
 
 </body>
