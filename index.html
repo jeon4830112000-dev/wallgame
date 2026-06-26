@@ -37,8 +37,6 @@
       color: #f1c40f;
       text-shadow: 1px 1px 2px #000;
     }
-    
-    /* 전장 및 시각 효과 레이아웃 */
     .battleground {
       display: flex;
       background: #111;
@@ -69,8 +67,6 @@
       border-left: 2px solid #333;
       position: relative;
     }
-    
-    /* 벽 스타일 및 애니메이션 */
     .wall-target {
       width: 120px;
       height: 150px;
@@ -88,9 +84,7 @@
       box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
       transition: transform 0.05s;
     }
-    .wall-target:active {
-      transform: scale(0.95);
-    }
+    .wall-target:active { transform: scale(0.95); }
     .hit-animation {
       animation: shake 0.1s infinite alternate;
     }
@@ -98,8 +92,6 @@
       0% { transform: translate(2px, 1px) rotate(0deg); }
       100% { transform: translate(-1px, -2px) rotate(1deg); }
     }
-
-    /* 소환된 캐릭터 스타일 */
     .summoned-char {
       width: 55px;
       height: 75px;
@@ -114,8 +106,6 @@
       0% { transform: translateX(0) scale(1); }
       100% { transform: translateX(10px) scale(1.05); }
     }
-    
-    /* 캐릭터 그래픽 외형 (이미지 및 졸라맨 구현) */
     .char-sprite {
       width: 40px;
       height: 40px;
@@ -124,24 +114,22 @@
       background-position: center;
       position: relative;
     }
-    /* 졸라맨(Stickman) CSS 구현 */
     .stickman {
       width: 20px;
       height: 40px;
       position: relative;
     }
-    .stickman::before { /* 머리 */
+    .stickman::before {
       content: ''; position: absolute; top: 0; left: 6px;
       width: 10px; height: 10px; border: 2px solid #fff; border-radius: 50%;
     }
-    .stickman::after { /* 몸통 */
+    .stickman::after {
       content: ''; position: absolute; top: 12px; left: 11px;
       width: 2px; height: 15px; background: #fff;
     }
-    .stick-limb { /* 팔다리 공통 */
+    .stick-limb {
       position: absolute; background: #fff;
     }
-
     .char-name-tag {
       font-size: 10px;
       background: rgba(0,0,0,0.7);
@@ -150,8 +138,6 @@
       margin-top: 4px;
       white-space: nowrap;
     }
-
-    /* 체력 바 */
     .hp-bar-container {
       width: 90%;
       background-color: #444;
@@ -164,8 +150,6 @@
       height: 15px;
       background-color: #e74c3c;
     }
-
-    /* 상점 레이아웃 */
     .shop-section { margin-top: 25px; }
     .shop-grid {
       display: grid;
@@ -191,14 +175,12 @@
     .shop-info .name { font-weight: bold; font-size: 16px; color: #fff; }
     .shop-info .details { font-size: 12px; color: #bbb; margin: 2px 0; }
     .shop-info .price { font-size: 13px; color: #f1c40f; font-weight: bold; }
-    
     .shop-item button {
       background: #2980b9; color: white; border: none; padding: 8px 12px;
       border-radius: 4px; font-weight: bold; cursor: pointer;
     }
     .shop-item button:disabled { background: #555; color: #888; cursor: not-allowed; }
     .shop-item.owned button { background: #27ae60; }
-
     .btn-action {
       background: #2c3e50; color: white; border: 1px solid #555;
       padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;
@@ -225,7 +207,6 @@
 
   <div class="battleground">
     <div class="summon-zone" id="summonZone"></div>
-    
     <div class="wall-zone">
       <div id="wallStageTxt" style="font-size:12px; color:#aaa; margin-bottom:5px;">1단계 벽</div>
       <div id="wallObj" class="wall-target" onclick="clickWall()">🧱<br>WALL</div>
@@ -245,36 +226,27 @@
 </div>
 
 <script>
-  // 게임 데이터 상태
   let gameState = {
     money: 500,
     wallHp: 1000,
     wallMaxHp: 1000,
+    wallLevel: 1,
     ownedCharacters: []
   };
 
-  // 캐릭터 마스터 데이터
-  // 구글 드라이브 '정우' 이미지의 다이렉트 호출 API 링크를 연동했습니다 (id: 1AhS138BLz4VGLOJBbtkT3nhquvunZ99O)
   const characterData = [
     { id: "coolkid", name: "쿨키드", cost: 2500, dmg: 50, isStick: true },
     { id: "slasher", name: "슬레셔", cost: 7500, dmg: 100, isStick: true },
-    { id: "jondo", name: "존도", cost: 15000, dmg: 500, img: "https://images.rbxcdn.com/9da76ab2e20b60459695669f69747209.png" }, 
-    { id: "1x1x1", name: "1x1x1", cost: 75000, dmg: 2000, img: "https://tr.rbxcdn.com/ec67b2d2a450a86f9ee5b1cb3c2957b7/420/420/Avatar/Png" }, 
+    { id: "jondo", name: "존도", cost: 15000, dmg: 500, img: "https://images.rbxcdn.com/9da76ab2e20b60459695669f69747209.png" },
+    { id: "1x1x1", name: "1x1x1", cost: 75000, dmg: 2000, img: "https://tr.rbxcdn.com/ec67b2d2a450a86f9ee5b1cb3c2957b7/420/420/Avatar/Png" },
     { id: "nolly", name: "놀리", cost: 150000, dmg: 7500, isStick: true },
-    { id: "guest666", name: "게스트666", cost: 500000, dmg: 30000, img: "https://tr.rbxcdn.com/13ccf30e611847e06a3e14300bb5b1f0/420/420/Avatar/Png" }, 
-    { id: "zenindo", name: "젠인도", cost: 1500000, dmg: 100000, img: "https://tr.rbxcdn.com/1df473215904d9a560f8fdfad5c86df2/420/420/Avatar/Png" }, 
-    { id: "jungwoo", name: "정우", cost: 75000000, dmg: 2500000, img : "https://lh3.googleusercontent.com/d/1AhS138BLz4VGLOJBbtkT3nhquvunZ99O" },
+    { id: "guest666", name: "게스트666", cost: 500000, dmg: 30000, img: "https://tr.rbxcdn.com/13ccf30e611847e06a3e14300bb5b1f0/420/420/Avatar/Png" },
+    { id: "zenindo", name: "젠인도", cost: 1500000, dmg: 100000, img: "https://tr.rbxcdn.com/1df473215904d9a560f8fdfad5c86df2/420/420/Avatar/Png" },
     { id: "cola", name: "콜라", cost: 19999999, dmg: 150000, img: "https://tr.rbxcdn.com/6bd484b90cb490891d575c80f4cf2dc2/420/420/Avatar/Png" },
-    {  id: "dnthfToa", 
-  name: "우솔쌤", 
-  cost: 250000000, 
-  dmg: 1200000,
-  img: "https://raw.githubusercontent.com/jeon4830112000-dev/wallgame/main/%EA%B9%80%EC%9A%B0%EC%86%94.jpg"
-}
-];
+    { id: "jungwoo", name: "정우", cost: 75000000, dmg: 2500000, img: "https://lh3.googleusercontent.com/d/1AhS138BLz4VGLOJBbtkT3nhquvunZ99O" },
+    { id: "dnthfToa", name: "우솔쌤", cost: 250000000, dmg: 1200000, img: "https://raw.githubusercontent.com/jeon4830112000-dev/wallgame/main/%EA%B9%80%EC%9A%B0%EC%86%94.jpg" }
   ];
 
-  // 총 초당 데미지 계산
   function getDps() {
     let dps = 0;
     gameState.ownedCharacters.forEach(id => {
@@ -284,45 +256,33 @@
     return dps;
   }
 
- // 플레이어 직접 클릭 타격
-function clickWall() {
-  // gameState.wallLevel이 1단계부터 시작한다고 가정합니다.
-  // (예: 1단계면 +10, 2단계면 +20 ... 또는 0단계부터 시작하면 (gameState.wallLevel + 1) * 10)
-  let levelBonus = (gameState.wallLevel || 1) * 10; 
-  
-  // 기본 데미지 15 + DPS의 10% + 벽 단계 보너스
-  let clickDmg = 20 + Math.floor(getDps() * 0.1) + levelBonus; 
-  
-  triggerHitVisual();
-  damageWall(clickDmg);
-}
-  
+  function clickWall() {
+    let levelBonus = (gameState.wallLevel || 1) * 10;
+    let clickDmg = 20 + Math.floor(getDps() * 0.1) + levelBonus;
+    triggerHitVisual();
+    damageWall(clickDmg);
+  }
 
-  // 벽 피격 시 진동 효과 비주얼 트리거
   function triggerHitVisual() {
     const wallObj = document.getElementById('wallObj');
     wallObj.classList.add('hit-animation');
     setTimeout(() => { wallObj.classList.remove('hit-animation'); }, 150);
   }
 
-  // 데미지 계산 및 벽 체력 처리 시스템
   function damageWall(amount) {
     if (gameState.wallHp <= 0) return;
-
     let actualDmg = Math.min(amount, gameState.wallHp);
     gameState.money += actualDmg;
     gameState.wallHp -= actualDmg;
-
-    // 벽 파괴 완료 -> 다음 단계 체력 2배 점프
     if (gameState.wallHp <= 0) {
       gameState.wallMaxHp *= 2;
       gameState.wallHp = gameState.wallMaxHp;
+      gameState.wallLevel = (gameState.wallLevel || 1) + 1;
       showStatus("🎉 성벽 돌파 성공! 다음 벽은 2배 더 단단합니다.");
     }
     updateUi();
   }
 
-  // 캐릭터 고용 시스템
   function buyCharacter(id, cost) {
     if (gameState.money >= cost && !gameState.ownedCharacters.includes(id)) {
       gameState.money -= cost;
@@ -332,33 +292,26 @@ function clickWall() {
     }
   }
 
-  // UI 리렌더링 및 소환 존 업데이트
   function updateUi() {
     document.getElementById('moneyTxt').innerText = Math.floor(gameState.money).toLocaleString();
     document.getElementById('hpTxt').innerText = `${Math.floor(gameState.wallHp).toLocaleString()} / ${gameState.wallMaxHp.toLocaleString()}`;
     document.getElementById('dpsTxt').innerText = getDps().toLocaleString();
-    
-    let stage = Math.round(Math.log10(gameState.wallMaxHp) - 2);
-    if(stage < 1) stage = 1;
+
+    let stage = gameState.wallLevel || 1;
     document.getElementById('wallStageTxt').innerText = `🔥 현재 벽: ${stage} 단계`;
 
-    // HP 바 스케일링
     let hpPercent = (gameState.wallHp / gameState.wallMaxHp) * 100;
     document.getElementById('hpBar').style.width = hpPercent + "%";
 
-    // 1. 소환존 그래픽 드로우
     const summonZone = document.getElementById('summonZone');
     summonZone.innerHTML = "";
-    
+
     gameState.ownedCharacters.forEach(id => {
       const char = characterData.find(c => c.id === id);
       if (!char) return;
-
       const charDiv = document.createElement('div');
       charDiv.className = "summoned-char";
-      
       if (char.isStick) {
-        // 졸라맨 구조물 렌더링
         charDiv.innerHTML = `
           <div class="stickman">
             <div class="stick-limb" style="width:10px; height:2px; top:15px; left:2px; transform:rotate(-15deg);"></div>
@@ -369,7 +322,6 @@ function clickWall() {
           <div class="char-name-tag">${char.name}</div>
         `;
       } else {
-        // 포세이큰 및 네임드 로블록스 스킨 이미지 렌더링
         charDiv.innerHTML = `
           <div class="char-sprite" style="background-image: url('${char.img}');"></div>
           <div class="char-name-tag" style="color:#f1c40f;">${char.name}</div>
@@ -378,24 +330,19 @@ function clickWall() {
       summonZone.appendChild(charDiv);
     });
 
-    // 2. 상점 리스트 렌더링
     const shopGrid = document.getElementById('shopGrid');
     shopGrid.innerHTML = "";
-
     characterData.forEach(char => {
       const isOwned = gameState.ownedCharacters.includes(char.id);
       const canBuy = gameState.money >= char.cost;
-
       const itemDiv = document.createElement('div');
       itemDiv.className = `shop-item ${isOwned ? 'owned' : ''}`;
-      
       let previewHtml = "";
       if (char.isStick) {
         previewHtml = `<div class="stickman" style="transform:scale(0.8); margin-top:5px;"></div>`;
       } else {
         previewHtml = `<div style="width:100%; height:100%; background-image:url('${char.img}'); background-size:cover; background-position:center; border-radius:4px;"></div>`;
       }
-
       itemDiv.innerHTML = `
         <div class="shop-preview">${previewHtml}</div>
         <div class="shop-info">
@@ -417,28 +364,20 @@ function clickWall() {
     setTimeout(() => { if(statusDiv.innerText === msg) statusDiv.innerText = ""; }, 3000);
   }
 
-  // [시트 연동 및 브라우저 세이브 통합] 데이터 백업 저장
   function saveGame() {
     showStatus("진행 상태 저장 중...");
-    
-    // 1. Google Apps Script 클라우드 백업 시도
     if (typeof google !== 'undefined' && google.script && google.script.run) {
       google.script.run
-        .withSuccessHandler(function(res) { 
-          showStatus(res); 
-        })
+        .withSuccessHandler(function(res) { showStatus(res); })
         .saveGameData(gameState.money, gameState.wallHp, gameState.wallMaxHp, gameState.ownedCharacters);
     } else {
-      // 2. 가스(GAS) 환경이 아닐 경우 로컬 스토리지에 세이브
       localStorage.setItem('forsaken_wall_save', JSON.stringify(gameState));
       showStatus("💾 브라우저 로컬 저장소에 세이브가 정상 저장되었습니다!");
     }
   }
 
-  // [시트 연동 및 브라우저 세이브 통합] 데이터 로드
   function loadGame() {
     showStatus("진행 데이터를 불러오는 중...");
-    
     if (typeof google !== 'undefined' && google.script && google.script.run) {
       google.script.run
         .withSuccessHandler(function(data) {
@@ -446,9 +385,10 @@ function clickWall() {
             gameState.money = Number(data.money) || 50;
             gameState.wallHp = Number(data.wallHp) || 1000;
             gameState.wallMaxHp = Number(data.wallMaxHp) || 1000;
+            gameState.wallLevel = Number(data.wallLevel) || 1;
             gameState.ownedCharacters = data.ownedCharacters || [];
             updateUi();
-            showStatus("데이터 로드 완료! 전장 정렬 완료.");
+            showStatus("데이터 로드 완료!");
           } else {
             loadLocalGame();
           }
@@ -459,7 +399,6 @@ function clickWall() {
     }
   }
 
-  // 로컬 세이브 불러오기 헬퍼
   function loadLocalGame() {
     const localData = localStorage.getItem('forsaken_wall_save');
     if (localData) {
@@ -468,9 +407,10 @@ function clickWall() {
         gameState.money = parsed.money || 50;
         gameState.wallHp = parsed.wallHp || 1000;
         gameState.wallMaxHp = parsed.wallMaxHp || 1000;
+        gameState.wallLevel = parsed.wallLevel || 1;
         gameState.ownedCharacters = parsed.ownedCharacters || [];
         updateUi();
-        showStatus("🔄 이전 브라우저 로컬 데이터를 성공적으로 불러왔습니다.");
+        showStatus("🔄 이전 데이터를 성공적으로 불러왔습니다.");
       } catch (e) {
         showStatus("새로운 전장 기록을 생성합니다.");
       }
@@ -479,7 +419,6 @@ function clickWall() {
     }
   }
 
-  // 방치형 오토 타이머 루프 (1초마다 자동 누적 데미지 및 애니메이션 연출 타격)
   setInterval(() => {
     let dps = getDps();
     if (dps > 0) {
